@@ -138,47 +138,59 @@ var data = [
 myWay = []
 mybfsWay = []
 
-function searchTree(element, matchingTitle){
-    if(element.title == matchingTitle && element.goal){
-        myWay.push(element.posicao)
-        return element;
-    }else if (element.children != null){ //PROFUNDIDADE
-         var i;
-         var result = null;
-         for(i=0; result == null && i < element.children.length; i++){
-            myWay.push(element.posicao)
-            result = searchTree(element.children[i], matchingTitle);
-         }
-         return result;
-    }
-    return null;
-}
+// function searchTree(element, matchingTitle){
+//     if(element.title == matchingTitle && element.goal){
+//         myWay.push(element.posicao)
+//         return element;
+//     }else if (element.children != null){ //PROFUNDIDADE
+//          var i;
+//          var result = null;
+//          for(i=0; result == null && i < element.children.length; i++){
+//             myWay.push(element.posicao)
+//             result = searchTree(element.children[i], matchingTitle);
+//          }
+//          return result;
+//     }
+//     return null;
+// }
 
 console.log("################ PROFUNDIDADE ##################")
-searchTree(data[0],'E')
+
+profundidadeWay(data[0],'E')
 console.log(myWay)
 console.log(myWay.length)
 
-console.log("################ LARGURA ##################")
-bfs(data[0],'E')
-console.log(mybfsWay)
-console.log(mybfsWay.length)
+// console.log("################ LARGURA ##################")
+// searchTree(data[0],'E')
+// console.log(mybfsWay)
+// console.log(mybfsWay.length)
+
+//test()
+
 
 // 
 // 
 //console.log(data[0])
 
+function test(){
+    var diff = myWay.filter(x=>!mybfsWay.includes(x));
+    if(diff.length == 0)
+        console.log('nao ha diff')
+    else
+        console.log(diff)
+}
 
-function bfs(element, matchingTitle){
+
+function profundidadeWay(element, matchingTitle){
     if(element.title == matchingTitle && element.goal){
-        mybfsWay.push(element.posicao)
+        myWay.push(element.posicao)
         return true
     }
     if(element.children != null){
         for(var counter = 0; counter < element.children.length; counter++){
             if (element.children[counter] != null){
-                mybfsWay.push(element.posicao)
-                var canReturn = bfs(element.children[counter], matchingTitle);
+                myWay.push(element.posicao)
+                var canReturn = profundidadeWay(element.children[counter], matchingTitle);
                 if(canReturn){
                     return canReturn
                 }
