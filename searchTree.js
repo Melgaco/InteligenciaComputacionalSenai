@@ -1,3 +1,60 @@
+var goalingArr = [{
+        posicao: 'leste ',
+        title: 'N',
+        children: [{
+            posicao: 'norte ',
+            title: 'I',
+            children: [{
+                posicao: 'oeste ',
+                title: 'H',
+                children: [{
+                    posicao: 'norte ',
+                    title: 'C',
+                    children: [{
+                        posicao: 'leste ',
+                        title: 'D',
+                        children: [{
+                            posicao: 'leste ',
+                            title: 'E',
+                            goal: true,
+                            children: [{
+                                posicao: 'norte ',
+                                title: 'J',
+                                children: null,
+                            }],
+                            
+                        }],
+                        
+                    }],
+                },{
+                    posicao: 'oeste',
+                    title: 'G',
+                    children: [{
+                            posicao: 'oeste',
+                            title: 'F',
+                            children: [{
+                                posicao: 'norte',
+                                title: 'A',
+                                children: [{
+                                    posicao: 'leste',
+                                    title: 'B',
+                                    children: null,
+                                    goal: false
+                                }]
+                            }]
+                        }]
+                }],
+                
+            }],    
+        },
+        {
+            posicao: 'leste',
+            title: 'O',
+            children: null
+        }],
+    }];
+    
+
 var data = [
     {
         posicao: 'ini',
@@ -31,43 +88,7 @@ var data = [
                                                         children: [{
                                                             posicao: 'norte ',
                                                             title: 'M',
-                                                            children: [{
-                                                                posicao: 'leste ',
-                                                                title: 'N',
-                                                                children: [{
-                                                                    posicao: 'norte ',
-                                                                    title: 'I',
-                                                                    children: [{
-                                                                        posicao: 'oeste ',
-                                                                        title: 'H',
-                                                                        children: [{
-                                                                            posicao: 'norte ',
-                                                                            title: 'C',
-                                                                            children: [{
-                                                                                posicao: 'leste ',
-                                                                                title: 'D',
-                                                                                children: [{
-                                                                                    posicao: 'leste ',
-                                                                                    title: 'E',
-                                                                                    goal: true,
-                                                                                    children: [{
-                                                                                        posicao: 'norte ',
-                                                                                        title: 'J',
-                                                                                        children: null,
-                                                                                    }],
-                                                                                    
-                                                                                }],
-                                                                                
-                                                                            }],
-                                                                            
-                                                                        }],
-                                                                        
-                                                                    }],
-                                                                    
-                                                                }],
-                                                                
-                                                            }],
-                                                            
+                                                            children:  goalingArr                                                            
                                                         }],
                                                         
                                                     }],
@@ -81,16 +102,41 @@ var data = [
                                 
                             },
                         ],
-                        
+                        posicao: 'norte',
+                        title: 'Q',
+                        children: [{
+                            posicao: 'norte',
+                            title: 'L',
+                            children: [{
+                                posicao: 'leste',
+                                title: 'M',
+                                children: goalingArr,
+                        }],
                     },
                 ],    
-                
-            }
-        ],
+                    },
+                ],
+            }, 
+            {
+                posicao: 'norte',
+                title: 'P',
+                children: [{
+                    posicao: 'norte',
+                    title: 'K',
+                    children: null
+                }],
+            }]
+}];
         
-    }];
+    
+// {
+//     posicao: 'norte',
+//     title: 'P',
+//     children: [{}]
+// }
 
 myWay = []
+mybfsWay = []
 
 function searchTree(element, matchingTitle){
     if(element.title == matchingTitle && element.goal){
@@ -108,15 +154,35 @@ function searchTree(element, matchingTitle){
     return null;
 }
 
+console.log("################ PROFUNDIDADE ##################")
 searchTree(data[0],'E')
-
-console.log("################")
 console.log(myWay)
+console.log(myWay.length)
 
-// moveBack(myWay)
+console.log("################ LARGURA ##################")
+bfs(data[0],'E')
+console.log(mybfsWay)
+console.log(mybfsWay.length)
 
-// function moveBack(arr){
-//     for(i = arr.length; i > 0; i--){
-//         console.log(arr[i])
-//     }
-// }
+// 
+// 
+//console.log(data[0])
+
+
+function bfs(element, matchingTitle){
+    if(element.title == matchingTitle && element.goal){
+        mybfsWay.push(element.posicao)
+        return true
+    }
+    if(element.children != null){
+        for(var counter = 0; counter < element.children.length; counter++){
+            if (element.children[counter] != null){
+                mybfsWay.push(element.posicao)
+                var canReturn = bfs(element.children[counter], matchingTitle);
+                if(canReturn){
+                    return canReturn
+                }
+            }
+        }
+    }
+}
